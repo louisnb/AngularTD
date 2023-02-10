@@ -1,0 +1,78 @@
+<app-navbar>
+<h3 class="mat-h3">
+    <button mat-icon-button (click)="goToLdap()">
+        <mat-icon aria-label="Accueil">arrow_back</mat-icon>
+    </button> {{addForm ? "Ajout utilisateur" : "Edition utilisateur"}}
+</h3>
+
+<section class="loading" *ngIf="processLoadRunning == true">
+    <mat-spinner diameter="25"></mat-spinner>
+    <span>&nbsp; En cours de chargement ...</span>
+</section>
+
+<app-alert *ngIf="errorMessage.length>0" [type]="'danger'">{{errorMessage}}</app-alert>
+
+<form class="user-form" *ngIf="processLoadRunning == false" [formGroup]="userForm" (ngSubmit)="onSubmitForm()">
+
+
+    <table class="user-full-width">
+        <tr>
+            <td>
+                <mat-form-field class="user-full-width">
+                    <input matInput class="form-control" placeholder="Nom d'utilisateur" id="nom" formControlName="nom" required (input)="updateLogin()">
+                    <mat-error>Le nom est requis</mat-error>
+                </mat-form-field>
+            </td>
+            <td>
+                <mat-form-field class="user-full-width">
+                    <input matInput class="form-control" placeholder="Prénom d'utilisateur" id="prenom" formControlName="prenom" required (input)="updateLogin()">
+                </mat-form-field>
+            </td>
+        </tr>
+    </table>
+
+    <table class="user-full-width">
+        <tr>
+            <td>
+                <mat-form-field class="user-full-width">
+                    <input matInput class="form-control" placeholder="Login d'utilisateur" id="login" formControlName="login" required (input)="updateLogin()">
+                </mat-form-field>
+            </td>
+            <td>
+                <mat-form-field class="user-full-width">
+                    <mat-label>Mail</mat-label>
+                    <input matInput formControlName="mail" name="mail">
+                </mat-form-field>
+            </td>
+        </tr>
+    </table>
+
+
+    <table class="user-full-width" formGroupName="passwordGroup">
+        <tr>
+            <td>
+                <mat-form-field class="user-full-width">
+                    <input matInput type="password" [placeholder]="passwordPlaceHolder" id="password" formControlName="password" [errorStateMatcher]="confirmValidParentMatcher">
+                    <mat-error>Les mots de passe doivent être les mêmes</mat-error>
+
+                </mat-form-field>
+            </td>
+            <td>
+                <mat-form-field class="user-full-width">
+                    <input matInput type="password" class="form-control" placeholder="Verification du mot de passe" id="confirmPassword" formControlName="confirmPassword">
+                    <mat-error>Les mots de passe doivent être les mêmes</mat-error>
+
+                </mat-form-field>
+            </td>
+        </tr>
+    </table>
+
+    <div style="display: flex;justify-content:flex-end;">
+        <button type="submit" mat-stroked-button color="primary" [disabled]="processValidateRunning || !isFormValid()">
+            <mat-icon *ngIf="processValidateRunning">
+                <mat-spinner diameter="16"></mat-spinner>
+            </mat-icon>Valider
+        </button>
+    </div>
+</form>
+</app-navbar>
